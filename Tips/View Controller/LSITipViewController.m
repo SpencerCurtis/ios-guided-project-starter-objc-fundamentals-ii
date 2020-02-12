@@ -100,7 +100,9 @@
 }
 
 - (void)updateViews {
-    
+    self.splitStepper.value = self.split;
+    self.percentageSlider.value = self.percentage;
+    self.totalTextField.text = [NSString stringWithFormat:@"%.2f", self.total];
 }
 
 // MARK: - UITableViewDataSource
@@ -123,6 +125,15 @@
 // MARK: - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    LSITip *tip = [self.tipController.tips objectAtIndex:indexPath.row];
+    
+    self.total = tip.total;
+    self.split = tip.splitCount;
+    self.percentage = tip.tipPercentage;
+    
+    [self updateViews];
+    [self calculateTip];
 }
 
 @end

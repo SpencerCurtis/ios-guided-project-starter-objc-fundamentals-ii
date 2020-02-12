@@ -7,6 +7,8 @@
 //
 
 #import "LSITipViewController.h"
+#import "LSITipController.h"
+#import "LSITip.h"
 
 @interface LSITipViewController ()
 
@@ -18,12 +20,23 @@
 @property (weak, nonatomic) IBOutlet UIStepper *splitStepper;
 @property (weak, nonatomic) IBOutlet UISlider *percentageSlider;
 
+@property (nonatomic) double total;
+@property (nonatomic) NSInteger split;
+@property (nonatomic) double percentage;
+@property (nonatomic) LSITipController *tipController;
+
+- (void)calculateTip;
+- (void)updateViews;
+
+
 @end
 
 @implementation LSITipViewController
 
 - (void)viewDidLoad {
-   
+    self.tipController = [[LSITipController alloc] init];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 }
 
 - (IBAction)updateSplit:(id)sender {
@@ -48,16 +61,24 @@
 
 // MARK: - UITableViewDataSource
 
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-//
-//}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.tipController.tips count];
+
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TipCell" forIndexPath:indexPath];
+       
+       LSITip *tip = [self.tipController.tips objectAtIndex:indexPath.row];
+       
+       cell.textLabel.text = tip.name;
+       
+       return cell;
+}
 
 // MARK: - UITableViewDelegate
 
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+}
 
 @end

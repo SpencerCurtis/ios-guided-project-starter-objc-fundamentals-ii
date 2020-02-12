@@ -21,7 +21,12 @@
 {
     self = [super init];
     if (self) {
-        _internalTips = [[NSMutableArray alloc] init];
+        
+        LSITip *tip = [[LSITip alloc] initWithName:@"Cheesecake Factory"
+                                             total:52
+                                        splitCount:2
+                                     tipPercentage:25];
+        _internalTips = [[NSMutableArray alloc] initWithObjects: tip, nil];
     }
     return self;
 }
@@ -35,6 +40,8 @@
                                          total:total
                                     splitCount:splitCount
                                  tipPercentage:tipPercentage];
+    
+    
     
     [self.internalTips addObject:tip];
 }

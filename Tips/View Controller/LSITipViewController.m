@@ -35,16 +35,19 @@
 
 - (void)viewDidLoad {
     self.tipController = [[LSITipController alloc] init];
+    
+    [self calculateTip];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 }
 
 - (IBAction)updateSplit:(id)sender {
-    
+    [self calculateTip];
 }
 
 - (IBAction)updatePercentage:(id)sender {
-    
+    [self calculateTip];
 }
 
 - (IBAction)saveTip:(id)sender {
@@ -52,7 +55,18 @@
 }
 
 - (void)calculateTip {
+    self.total = [self.totalTextField.text doubleValue];
     
+    self.split = self.splitStepper.value;
+    self.splitLabel.text = [NSString stringWithFormat:@"%d", (int)self.splitStepper.value];
+    
+    int roundedPercentage = (int)self.percentageSlider.value;
+    self.percentage = roundedPercentage;
+    self.percentageLabel.text = [NSString stringWithFormat:@"%d", roundedPercentage];
+    
+    double tip = self.total * (self.percentage / 100) / self.split;
+    
+    self.tipLabel.text = [NSString stringWithFormat:@"$%.2f", tip];
 }
 
 - (void)updateViews {

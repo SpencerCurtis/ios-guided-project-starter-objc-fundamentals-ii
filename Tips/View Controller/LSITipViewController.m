@@ -37,7 +37,6 @@
     self.tipController = [[LSITipController alloc] init];
     
     [self calculateTip];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 }
@@ -51,7 +50,38 @@
 }
 
 - (IBAction)saveTip:(id)sender {
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:@"Save Tip"
+                                message:@"What name would you like to give to this tip?"
+                                preferredStyle:UIAlertControllerStyleAlert];
     
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"Tip Name:";
+    }];
+    
+    UIAlertAction *saveAction = [UIAlertAction actionWithTitle:@"Save"
+                                                         style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        NSString *name = [[alert.textFields firstObject] text];
+        
+        [self.tipController createTipWithName: name
+                                        total: self.total
+                                   splitCount: self.split
+                                tipPercentage: self.percentage];
+        
+        [self.tableView reloadData];
+        
+    }];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    
+    [alert addAction:saveAction];
+    [alert addAction:cancelAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)calculateTip {
@@ -77,17 +107,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.tipController.tips count];
-
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TipCell" forIndexPath:indexPath];
-       
-       LSITip *tip = [self.tipController.tips objectAtIndex:indexPath.row];
-       
-       cell.textLabel.text = tip.name;
-       
-       return cell;
+    
+    LSITip *tip = [self.tipController.tips objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = tip.name;
+    
+    return cell;
 }
 
 // MARK: - UITableViewDelegate

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LSITipViewController : UIViewController
+@interface LSITipViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @end
 
